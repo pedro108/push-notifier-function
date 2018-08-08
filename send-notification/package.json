@@ -4,12 +4,15 @@
   "description": "Push Notifer function for the MAG Stack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/test.js"
   },
-  "author": "Pedro de Jesus",
+  "author": "Pedro de Jesus (pjesus@wkm.com.br)",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "dotenv": "^6.0.0",
     "onesignal-node": "^2.0.0"
+  },
+  "devDependencies": {
+    "chance": "^1.0.16"
   }
 }
