@@ -1,0 +1,15 @@
+{
+  "name": "mag-push-notifier",
+  "version": "1.0.0",
+  "description": "Push Notifer function for the MAG Stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pedro de Jesus",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "onesignal-node": "^2.0.0"
+  }
+}
