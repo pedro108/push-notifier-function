@@ -9,12 +9,12 @@ module.exports = function (context, req) {
                 appAuthKey: "MTFmNTU5NjgtMGQyMS00MWYyLTljZTQtYTE3N2MzMDVmM2Zk"
             }
         });
-    
         if (req.body && req.body.name) {
             const notification = new OneSignal.Notification({
                 contents: {
-                    en: `Notificando %{req.body.name}`
-                }
+                    en: `Notificando ${req.body.name}`
+                },
+                included_segments: ["Active Users"],
             });
             oneSignalClient.sendNotification(notification, function(err, httpResponse, data) {
                 if (err) {
@@ -25,10 +25,9 @@ module.exports = function (context, req) {
                 } else {
                     context.res = {
                         status: httpResponse.statusCode,
-                        body: {"name": "Erro ao enviar notificação para " + req.body.name, "data": data}
+                        body: {"name": "Erro ao enviar notificação para " + req.body.name, "data": JSON.stringify(data)}
                     };
                 }
-    
                 context.done();
             });
                 }
@@ -44,5 +43,6 @@ module.exports = function (context, req) {
             status: 500,
             error: err
         }
+        context.done();
     }
 };
