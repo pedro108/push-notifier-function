@@ -13,7 +13,7 @@ module.exports = function (context, req) {
         if (req.body && req.body.name) {
             const notification = new OneSignal.Notification({
                 contents: {
-                    en: `Notificando %{req.body.name}`;
+                    en: `Notificando %{req.body.name}`
                 }
             });
             oneSignalClient.sendNotification(notification, function(err, httpResponse, data) {
