@@ -11,9 +11,9 @@ module.exports = function (context, req) {
         });
         if (req.body && req.body.name) {
             const notification = new OneSignal.Notification({
-                contents: {
-                    en: `Notificando ${req.body.name}`
-                },
+                contents: { en: req.body.message },
+                headings: { en: req.body.title },
+                subtitle: { en: req.body.subtitle },
                 included_segments: ["Active Users"],
             });
             oneSignalClient.sendNotification(notification, function(err, httpResponse, data) {
