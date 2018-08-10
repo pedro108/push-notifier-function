@@ -1,5 +1,5 @@
 const Chance = require('chance');
-const subject = require('../index.js');
+const subject = require('./index.js');
 
 let context = {
   done: function () {
