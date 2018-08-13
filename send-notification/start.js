@@ -6,17 +6,17 @@ let context = {
   }, res: {body: {}, status: {}},
 };
 context.done = function () {
-  console.log(context);
+  console.log(context.res.body.data);
 };
 
 const chance = new Chance();
 
 subject(context, {
   body: {
-    name: chance.name(),
+    title: 'Pablo',
     message: chance.sentence(),
-    title: chance.word(),
-    subtitle: chance.sentence(),
+    link: chance.url(),
+    deviceIds: [],
   },
 });
 

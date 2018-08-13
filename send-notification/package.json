@@ -14,11 +14,14 @@
     "testURL": "http://localhost"
   },
   "dependencies": {
+    "ajv": "^6.5.2",
+    "ajv-i18n": "^3.3.0",
     "dotenv": "^6.0.0",
     "onesignal-node": "^2.0.0"
   },
   "devDependencies": {
     "chance": "^1.0.16",
-    "jest": "^23.4.2"
+    "jest": "^23.4.2",
+    "mock-env": "^0.2.0"
   }
 }

@@ -1,17 +1,8 @@
-const ValidationError = require('../errors/validation_error');
-
-function validateNotification(notification) {
-  return (
-    notification.title &&
-    notification.subtitle &&
-    notification.message
-  );
-}
+const SchemaValidator = require('./schema_validator');
+const NotificationSchema = require('../schemas/notification_schema');
 
 function validate(notification) {
-  if (!validateNotification(notification)) {
-    throw new ValidationError('Notificação inválida! Notificações são compostas por um título, um subtítulo e uma mensagem.');
-  }
+  return SchemaValidator.validate('Notificação', NotificationSchema, notification);
 }
 
 module.exports = {

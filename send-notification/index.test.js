@@ -1,7 +1,7 @@
 const Chance = require('chance');
-const subject = require('../index');
+const subject = require('./index');
 
-jest.mock('../services/send_notification_service');
+jest.mock('./services/send_notification_service');
 
 describe('On function execution', () => {
   let chance;
@@ -31,7 +31,7 @@ describe('On function execution', () => {
     test('it should validate that the request body is a valid notification', () => {
       subject(contextMock, { body: {} });
       expect(contextMock.res).toEqual({
-        error: "Notificação inválida! Notificações são compostas por um título, um subtítulo e uma mensagem.",
+        error: "Notificação deve ter a propriedade requerida title, Notificação deve ter a propriedade requerida message",
         status: 422,
       });
       expect(contextMock.done.mock.calls.length).toBe(1);
@@ -44,8 +44,9 @@ describe('On function execution', () => {
       await subject(contextMock, {
         body: {
           title: chance.name(),
-          subtitle: chance.sentence(),
           message: chance.sentence(),
+          deviceIds: [chance.guid()],
+          link: chance.url(),
         },
       });
       expect(contextMock.res).toEqual({

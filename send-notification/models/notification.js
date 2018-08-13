@@ -1,7 +1,8 @@
 module.exports = class Notification {
-  constructor({ title, subtitle, message }) {
+  constructor({ title, deviceIds, message, link }) {
     this.title = title;
-    this.subtitle = subtitle;
     this.message = message;
+    this.deviceIds = deviceIds;
+    this.link = link;
   }
 };

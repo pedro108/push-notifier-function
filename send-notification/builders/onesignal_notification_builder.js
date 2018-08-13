@@ -1,12 +1,19 @@
 const OneSignal = require('onesignal-node');
 
 function build(notification) {
-  return new OneSignal.Notification({
+  let buildParameters = {
     headings: {en: notification.title},
     contents: {en: notification.message},
-    subtitle: {en: notification.subtitle},
-    included_segments: ["Active Users"],
-  });
+    url: notification.link,
+  };
+
+  if (notification.deviceIds.length > 0) {
+    buildParameters.include_player_ids = notification.deviceIds;
+  } else {
+    buildParameters.included_segments = ["Active Users"];
+  }
+
+  return new OneSignal.Notification(buildParameters);
 }
 
 module.exports = {
