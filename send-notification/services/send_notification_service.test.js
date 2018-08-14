@@ -40,32 +40,53 @@ describe('When a notification is sent', () => {
     expect(OneSignalNotificationBuilder.build).toBeCalledWith(mockNotification);
   });
 
-  it('should send the notification and handle its callback correctly as a promise', () => {
-    const mockErr = chance.bool();
-    const mockHttpResponse = { statusCode: chance.natural({ max: 999 }) };
-    const mockData = { data: chance.guid() };
+  describe('successfully', () => {
+    it('should send the notification and handle its callback correctly as a promise', () => {
+      const mockHttpResponse = { statusCode: chance.natural({ max: 999 }) };
+      const mockData = { data: chance.guid() };
 
-    mockSendNotification.mockImplementationOnce((notification, callback) => {
-      expect(notification).toEqual(mockOneSignalNotification);
-      callback(mockErr, mockHttpResponse, mockData);
-    });
+      mockSendNotification.mockImplementationOnce((notification, callback) => {
+        expect(notification).toEqual(mockOneSignalNotification);
+        callback(false, mockHttpResponse, mockData);
+      });
 
-    subject.send(mockNotification).then((result) => {
-      expect(result.status).toEqual(mockHttpResponse.statusCode);
-      expect(result.body.data).toEqual(mockData);
-      expect(result.body.name).toEqual(mockErr ? 'Erro ao enviar notificação' : 'Notificação enviada com sucesso!');
+      subject.send(mockNotification).then((result) => {
+        expect(result.status).toEqual(mockHttpResponse.statusCode);
+        expect(result.body.data).toEqual(mockData);
+        expect(result.body.name).toEqual('Notificação enviada com sucesso!');
+      });
     });
   });
 
-  it('should handle a sendNotification exception with a promise rejection', () => {
-    const mockException = chance.sentence();
-    mockSendNotification.mockImplementationOnce((notification) => {
-      expect(notification).toEqual(mockOneSignalNotification);
-      throw new Error(mockException);
+  describe('with errors', () => {
+    describe('when it is a OneSignal response error', () => {
+      it('should return an error message in the resolved body', () => {
+        const mockHttpResponse = { statusCode: chance.natural({ min: 400, max: 999 }) };
+        const mockData = { data: chance.guid() };
+
+        mockSendNotification.mockImplementationOnce((notification, callback) => {
+          expect(notification).toEqual(mockOneSignalNotification);
+          callback(true, mockHttpResponse, mockData);
+        });
+
+        subject.send(mockNotification).then((result) => {
+          expect(result.body.name).toEqual('Erro ao enviar notificação');
+        });
+      });
     });
 
-    subject.send(mockNotification).catch((reason) => {
-      expect(reason.message).toEqual(mockException);
+    describe('when it throws an exception', () => {
+      it('should handle a sendNotification exception with a promise rejection', () => {
+        const mockException = chance.sentence();
+        mockSendNotification.mockImplementationOnce((notification) => {
+          expect(notification).toEqual(mockOneSignalNotification);
+          throw new Error(mockException);
+        });
+
+        subject.send(mockNotification).catch((reason) => {
+          expect(reason.message).toEqual(mockException);
+        });
+      });
     });
   });
 });

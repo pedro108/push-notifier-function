@@ -1,5 +1,7 @@
 const Chance = require('chance');
 const subject = require('./index');
+const ValidationError = require('./errors/validation_error');
+const SendNotificationService = require('./services/send_notification_service');
 
 jest.mock('./services/send_notification_service');
 
@@ -16,6 +18,14 @@ describe('On function execution', () => {
         status: {}
       },
     };
+
+    SendNotificationService.send = jest.fn(() => Promise.resolve({
+      status: 200,
+      body: {
+        name: 'Notificação enviada com sucesso!',
+        data: {},
+      }
+    }));
   });
 
   describe('with an invalid input', () => {
@@ -28,11 +38,30 @@ describe('On function execution', () => {
       expect(contextMock.done.mock.calls.length).toBe(1);
     });
 
-    test('it should validate that the request body is a valid notification', () => {
+    test('it should handle validation exceptions', () => {
+      const mockError = chance.sentence();
+      SendNotificationService.send.mockImplementationOnce(() => {
+        throw new ValidationError(mockError);
+      });
+
       subject(contextMock, { body: {} });
       expect(contextMock.res).toEqual({
-        error: "Notificação deve ter a propriedade requerida title, Notificação deve ter a propriedade requerida message",
+        error: mockError,
         status: 422,
+      });
+      expect(contextMock.done.mock.calls.length).toBe(1);
+    });
+
+    test('it should handle unexpected exceptions', () => {
+      const mockError = chance.sentence();
+      SendNotificationService.send.mockImplementationOnce(() => {
+        throw new Error(mockError);
+      });
+
+      subject(contextMock, { body: {} });
+      expect(contextMock.res).toEqual({
+        error: mockError,
+        status: 500,
       });
       expect(contextMock.done.mock.calls.length).toBe(1);
     });
