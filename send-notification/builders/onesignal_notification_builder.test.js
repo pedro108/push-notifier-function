@@ -22,10 +22,19 @@ describe('On OneSignal Notification Builder execution', () => {
     expect(builtNotification.postBody["included_segments"]).toEqual(undefined);
   });
 
-  it('should send notification without deviceIds included', () => {
-    contextMock.deviceIds = [];
-    const builtNotification = subject.build(contextMock);
-    expect(builtNotification.postBody["include_player_ids"]).toEqual(undefined);
-    expect(builtNotification.postBody["included_segments"]).toEqual(["Active Users"]);
+  describe('it should send notification without deviceIds included', () => {
+    it('when deviceIds is an empty array', () => {
+      contextMock.deviceIds = [];
+      const builtNotification = subject.build(contextMock);
+      expect(builtNotification.postBody["include_player_ids"]).toEqual(undefined);
+      expect(builtNotification.postBody["included_segments"]).toEqual(["Active Users"]);
+    });
+
+    it('when deviceIds is null or undefined', () => {
+      contextMock.deviceIds = null;
+      const builtNotification = subject.build(contextMock);
+      expect(builtNotification.postBody["include_player_ids"]).toEqual(undefined);
+      expect(builtNotification.postBody["included_segments"]).toEqual(["Active Users"]);
+    });
   });
 });

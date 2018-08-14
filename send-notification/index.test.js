@@ -29,7 +29,7 @@ describe('On function execution', () => {
   });
 
   describe('with an invalid input', () => {
-    test('it should validate the request', () => {
+    it('should validate the request', () => {
       subject(contextMock, {});
       expect(contextMock.res).toEqual({
         error: "O corpo da requisição é obrigatório!",
@@ -38,7 +38,7 @@ describe('On function execution', () => {
       expect(contextMock.done.mock.calls.length).toBe(1);
     });
 
-    test('it should handle validation exceptions', () => {
+    it('should handle validation exceptions', () => {
       const mockError = chance.sentence();
       SendNotificationService.send.mockImplementationOnce(() => {
         throw new ValidationError(mockError);
@@ -52,7 +52,7 @@ describe('On function execution', () => {
       expect(contextMock.done.mock.calls.length).toBe(1);
     });
 
-    test('it should handle unexpected exceptions', () => {
+    it('should handle unexpected exceptions', () => {
       const mockError = chance.sentence();
       SendNotificationService.send.mockImplementationOnce(() => {
         throw new Error(mockError);
@@ -65,10 +65,24 @@ describe('On function execution', () => {
       });
       expect(contextMock.done.mock.calls.length).toBe(1);
     });
+
+    it('should handle SendNotification promise rejection', () => {
+      const mockError = chance.sentence();
+      SendNotificationService.send.mockImplementationOnce(() => Promise.reject(mockError));
+
+      subject(contextMock, { body: {} }).catch((reason) => {
+        expect(reason).toEqual(mockError);
+        expect(contextMock.res).toEqual({
+          error: mockError,
+          status: 500,
+        });
+        expect(contextMock.done.mock.calls.length).toBe(1);
+      });
+    });
   });
 
   describe('with a valid input', () => {
-    test('it should send the notification and write the context', async () => {
+    it('should send the notification and write the context', async () => {
       expect.assertions(2);
       await subject(contextMock, {
         body: {

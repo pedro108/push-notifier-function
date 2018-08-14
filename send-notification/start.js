@@ -13,7 +13,7 @@ const chance = new Chance();
 
 subject(context, {
   body: {
-    title: 'Pablo',
+    title: chance.name(),
     message: chance.sentence(),
     link: chance.url(),
     deviceIds: [],
