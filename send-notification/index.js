@@ -1,4 +1,3 @@
-require('dotenv').load();
 const Notification = require('./models/notification');
 const SendNotificationService = require('./services/send_notification_service');
 const RequestValidator = require('./validators/request_validator');

@@ -4,7 +4,6 @@
   "description": "Push Notifer function for the MAG Stack",
   "main": "index.js",
   "scripts": {
-    "start": "node --use_strict start.js",
     "test": "jest"
   },
   "author": "Pedro de Jesus (pjesus@wkm.com.br)",
@@ -24,7 +23,6 @@
   "dependencies": {
     "ajv": "^6.5.2",
     "ajv-i18n": "^3.3.0",
-    "dotenv": "^6.0.0",
     "onesignal-node": "^2.0.0"
   },
   "devDependencies": {

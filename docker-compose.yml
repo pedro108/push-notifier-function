@@ -1,0 +1,10 @@
+version: '3'
+services:
+  azure-host:
+    build: .
+    ports:
+      - 7071:7071
+    volumes:
+      - .:/app
+    working_dir: /app
+    entrypoint: ["func", "host", "start"]

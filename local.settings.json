@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "USER_AUTH_KEY": "",
+    "APP_AUTH_KEY": "",
+    "APP_ID": ""
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "*"
+  }
+}
